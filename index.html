@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	</head>
+	<body>
+		{{}}
+	</body>
+			<script>
+				buttons = document.querySelectorAll("button")
+				buttons.forEach( btn => {
+									btn.addEventListener('click', event => {
+														button_id = event.target.id
+														console.log(button_id)
+														// update state of button by sending a request
+													})
+								})
+			</script>
+</html>

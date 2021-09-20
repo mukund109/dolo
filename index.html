@@ -3,6 +3,7 @@
 	<head>
 	</head>
 	<body>
+		<a href="/refresh">Refresh App</a>
 		{{}}
 	</body>
 			<script>
@@ -12,6 +13,17 @@
 														button_id = event.target.id
 														console.log(button_id)
 														// update state of button by sending a request
+														let data = {widget_state: true};
+
+														fetch(`/event/${button_id}`, {
+																			method: "POST",
+																			body: JSON.stringify(data),
+																			headers: {
+																								'Content-Type': 'application/json'
+																							},
+																		}).then(res => {
+																							window.location.reload()
+																						});
 													})
 								})
 			</script>

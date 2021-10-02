@@ -85,6 +85,22 @@ class Dropdown(Widget):
         self.key = str(hash(self.description + ''.join(self.choices)))
         super().__init__()
 
+@dataclass
+class Filter(Widget):
+    state: str
+    filters: set
+    description: str
+    color: str
+
+    def __post_init__(self):
+        self.key = str(hash(self.description + ''.join(self.filters)))
+        self.theme = {
+            "green": "label-success",
+            "red": "label-error",
+            "yellow": "label-warning",
+            "blue": "label-primary"
+        }[self.color]
+        super().__init__()
 
 def write(markup):
     return Markup(markup)
@@ -108,6 +124,11 @@ def dropdown(choices, default_choice, description):
     assert len(choices) >= 1
     return Dropdown(default_choice, choices, description).state
 
+def filter(filters, active, description, color="green"):
+    assert color in ["red", "yellow", "green", "blue"]
+    assert active in filters
+    assert len(filters) >= 1
+    return Filter(active, filters, description, color).state
 
 def cache(func):
     func_id = func.__name__

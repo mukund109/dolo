@@ -56,6 +56,18 @@ footer {
           </ul>
         </div>
         {% endif %}
+        {% if component.type_name == 'Filter' %}
+        <div id="{{ component.key }}" class="filter">
+          <b>{{component.description}}: </b>
+          {% for f in component.filters %}
+          <a href="javascript:;" style="text-decoration: none;">
+            <span class="label label-rounded {{ component.theme if (f == component.state) else '' }}">
+              {{ f }}
+            </span>
+          </a>
+          {% endfor %}
+        </div>
+        {% endif %}
       </div>
       {% endfor %}
     </div>
@@ -100,5 +112,14 @@ footer {
                 update_state(a.innerText, id)
               })
         })
+
+    filter_choices = document.querySelectorAll("div.filter a span.label")
+    filter_choices.forEach( span => {
+          span.addEventListener('click', event => {
+                id = event.target.parentElement.parentElement.id
+                update_state(span.innerText, id)
+              })
+        })
+
   </script>
 </html>

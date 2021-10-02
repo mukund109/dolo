@@ -1,104 +1,104 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
-		<link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
-		<style>
+  <head>
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css">
+    <style>
 body {
-	width:1000px;
-	margin:10px auto;
-	height:100%
+  width:1000px;
+  margin:10px auto;
+  height:100%
 }
 
 footer {
-	position:absolute;
-	bottom:0;
-	width:100%;
-	height:auto;   /* Height of the footer */
-	padding:0.2em;
+  bottom:0;
+  width:100%;
+  height:auto;   /* Height of the footer */
+  padding:0.2em;
 }
-		</style>
-	</head>
-	<body>
-		<header class="navbar">
-			<section class="navbar-section">
-			</section>
-			<section class="navbar-section">
-				<a href="/refresh">
-					<button class="btn btn-large">
-						<i class="icon icon-refresh"></i>
-					</button>
-				</a>
-			</section>
-		</header>
-		<div class="container">
-			{% for component in g.components %}
-			<div style="padding: 0.5rem">
-				{% if component.html %}
-				<div>
-					{{ component.html|safe }}
-				</div>
-				{% endif %}
-				{% if component.type_name == 'Button' %}
-				<button id="{{ component.key }}" class="btn comp">
-					{{ component.description|safe }}
-				</button>
-				{% endif %}
-				{% if component.type_name == 'Dropdown' %}
-				<div id="{{ component.key }}" class="dropdown">
-					<a href="#" class="btn btn-primary dropdown-toggle" tabindex="0">
-						Dropdown toggle <i class="icon icon-caret"></i>
-					</a>
-					<!-- menu component -->
-					<ul class="menu">
-						{% for choice in component.choices %}
-						<li class="menu-item"><a class="{{ 'active' if (choice == component.state) else '' }}" href="#">{{ choice }}</a></li>
-						{% endfor %}
-					</ul>
-				</div>
-				{% endif %}
-			</div>
-			{% endfor %}
-		</div>
-		<footer>
-			<mark>Session ID: {{ session["id"] }}</mark>
-		</footer>
-	</body>
-	<script>
-		const update_state = (state, id) => {
+    </style>
+  </head>
+  <body>
+    <header class="navbar">
+      <section class="navbar-section">
+      </section>
+      <section class="navbar-section">
+        <a href="/refresh">
+          <button class="btn btn-large">
+            <i class="icon icon-refresh"></i>
+          </button>
+        </a>
+      </section>
+    </header>
+    <div class="container">
+      {% for component in g.components %}
+      <div style="padding: 0.5rem">
+        {% if component.html %}
+        <div>
+          {{ component.html|safe }}
+        </div>
+        {% endif %}
+        {% if component.type_name == 'Button' %}
+        <button id="{{ component.key }}" class="btn comp">
+          {{ component.description|safe }}
+        </button>
+        {% endif %}
+        {% if component.type_name == 'Dropdown' %}
+        <div id="{{ component.key }}" class="dropdown">
+          <a href="#" class="btn btn-primary dropdown-toggle" tabindex="0">
+            Dropdown toggle <i class="icon icon-caret"></i>
+          </a>
+          <!-- menu component -->
+          <ul class="menu">
+            {% for choice in component.choices %}
+            <li class="menu-item"><a class="{{ 'active' if (choice == component.state) else '' }}" href="#">{{ choice }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    <footer>
+      <mark>Session ID: {{ session["id"] }}</mark>
+    </footer>
+  </body>
+  <script>
+    const update_state = (state, id) => {
 
-					// update state of button by sending a request
-					let data = {widget_state: state};
+          console.log(window.scrollY)
+          // update state of button by sending a request
+          let data = {widget_state: state};
 
-					fetch(`/event/${id}`, {
-								method: "POST",
-								body: JSON.stringify(data),
-								headers: {
-											'Content-Type': 'application/json'
-										},
-							}).then(res => {
-										if (res.status == 205){
-													window.location.reload();
-												}
-									});
-				}
+          fetch(`/event/${id}`, {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: {
+                      'Content-Type': 'application/json'
+                    },
+              }).then(res => {
+                    if (res.status == 205){
+                          window.location.reload();
+                        }
+                  });
+        }
 
-		buttons = document.querySelectorAll("button.comp")
-		buttons.forEach( btn => {
-					btn.addEventListener('click', event => {
-								button_id = event.target.id
-								console.log(button_id)
-								// update state of button by sending a request
-								update_state(true, button_id)
-							})
-				})
+    buttons = document.querySelectorAll("button.comp")
+    buttons.forEach( btn => {
+          btn.addEventListener('click', event => {
+                button_id = event.target.id
+                console.log(button_id)
+                // update state of button by sending a request
+                update_state(true, button_id)
+              })
+        })
 
-		dropdown_choices = document.querySelectorAll("div.dropdown ul.menu li.menu-item a")
-		dropdown_choices.forEach( a => {
-					a.addEventListener('click', event => {
-								id = event.target.parentElement.parentElement.parentElement.id
-								update_state(a.innerText, id)
-							})
-				})
-	</script>
+    dropdown_choices = document.querySelectorAll("div.dropdown ul.menu li.menu-item a")
+    dropdown_choices.forEach( a => {
+          a.addEventListener('click', event => {
+                id = event.target.parentElement.parentElement.parentElement.id
+                update_state(a.innerText, id)
+              })
+        })
+  </script>
 </html>

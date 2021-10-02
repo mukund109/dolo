@@ -45,13 +45,13 @@ footer {
         {% endif %}
         {% if component.type_name == 'Dropdown' %}
         <div id="{{ component.key }}" class="dropdown">
-          <a href="#" class="btn btn-primary dropdown-toggle" tabindex="0">
+          <a href="javascript:;" class="btn btn-primary dropdown-toggle" tabindex="0">
             Dropdown toggle <i class="icon icon-caret"></i>
           </a>
           <!-- menu component -->
           <ul class="menu">
             {% for choice in component.choices %}
-            <li class="menu-item"><a class="{{ 'active' if (choice == component.state) else '' }}" href="#">{{ choice }}</a></li>
+            <li class="menu-item"><a class="{{ 'active' if (choice == component.state) else '' }}" href="javascript:;">{{ choice }}</a></li>
             {% endfor %}
           </ul>
         </div>

@@ -90,7 +90,7 @@ def write(markup):
     return Markup(markup)
 
 
-def table(df, display_index=True, striped=False):
+def table(df, display_index=True, striped=True):
     classes = ["table"]
     if striped:
         classes.append("table-striped")

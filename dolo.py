@@ -82,7 +82,7 @@ class Dropdown(Widget):
     description: str
 
     def __post_init__(self):
-        self.key = str(hash(self.description))
+        self.key = str(hash(self.description + ''.join(self.choices)))
         super().__init__()
 
 

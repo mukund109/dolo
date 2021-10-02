@@ -46,7 +46,7 @@ footer {
         {% if component.type_name == 'Dropdown' %}
         <div id="{{ component.key }}" class="dropdown">
           <a href="javascript:;" class="btn btn-primary dropdown-toggle" tabindex="0">
-            Dropdown toggle <i class="icon icon-caret"></i>
+            {{ component.description }}<i class="icon icon-caret"></i>
           </a>
           <!-- menu component -->
           <ul class="menu">

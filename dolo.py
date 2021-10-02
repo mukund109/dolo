@@ -2,11 +2,14 @@ import flask
 from flask import session, g
 from collections import defaultdict
 from dataclasses import dataclass
+from functools import lru_cache, wraps
 
 print("Creating state dictionary")
-# `state` stores widget states for different client sessions
-# It's not thread safe
+# `state` is a dictionary that stores widget states for different client sessions
 # session -> widget id -> state
+# It also stores cached functions
+# function_name -> function(+cache)
+# It's not thread safe
 state = defaultdict(dict)
 
 # Widgets are stateful components
@@ -104,3 +107,24 @@ def dropdown(choices, default_choice, description):
     assert default_choice in choices
     assert len(choices) >= 1
     return Dropdown(default_choice, choices, description).state
+
+
+def cache(func):
+    func_id = func.__name__
+
+    if func_id in state:
+        return state[func_id]
+
+    # This cache persists across different requests AND sessions, and refreshes of the session
+    # It doesn't persist across different instances of the app
+    # Since the cached values are tied to `wrapper`, if `wrapper` changes the cached values also disappear
+    @wraps(func)
+    @lru_cache(maxsize=None)
+    def wrapper(*args, **kwargs):
+        print("Running heavy function")
+        return func(*args, **kwargs)
+
+    state[func_id] = wrapper
+    return wrapper
+
+print("Dolo is loaded")

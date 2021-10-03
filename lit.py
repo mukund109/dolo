@@ -1,44 +1,30 @@
-import pandas as pd
-import random
 import dolo
+import seaborn as sns
+import matplotlib
+import matplotlib.pyplot as plt
 
-dolo.write(
-    """
-<h2>The App of the Gods</h2>
-"""
+sns.set_theme()
+
+matplotlib.use("Agg")
+
+dolo.write("<h2>Create a dropdown</h2>")
+
+name = dolo.dropdown(
+    choices=["planets", "titanic", "iris"],
+    default_choice="planets",
+    description="Pick a dataset",
 )
 
-button = dolo.button("Click Me!")
+df = sns.load_dataset(name)
 
-if button:
-    dolo.write("SUCCESS! BUTTON HAS BEEN PRESSED!")
-else:
-    dolo.write("Button hasn't been pressed")
+dolo.table(df.head(7))
 
-another_button = dolo.button("Don't Click!")
+dolo.write("<br><h4>Plot some figures!</h4>")
 
-if another_button:
-    dolo.write("YET ANOTHER SUCCESSFUL BUTTON PRESS")
-
-df = pd.DataFrame(
-    {
-        "Movies": [
-            "Real Housewives Of Shawshank",
-            "Avengers: Ek Prem Katha",
-            "Harry Singh and the Sorcerer's Dupatta",
-        ],
-        "Genre": ["Crime, Situational Comedy", "Romance, Thanos", "Magical Romance"],
-        "Directors": ["Anurag Kashyap", "Akshay Kumar", "James Cameron"],
-    }
+x_col = dolo.filter(filters=df.columns, active=df.columns[0], description="X-axis")
+y_col = dolo.filter(
+    filters=df.columns, active=df.columns[1], description="Y-axis", color="yellow"
 )
 
-dolo.table(df, display_index=False, striped=True)
-
-choice = dolo.dropdown(
-    ["Yolo", "Dolo", "Streamlit", "Shiny"], "Dolo", "Pick the best data app framework"
-)
-
-dolo.write("Active choice: " + choice)
-
-a = str(random.randint(0, 10))
-dolo.write(a)
+fig = sns.relplot(data=df, x=x_col, y=y_col)
+dolo.plot(fig)

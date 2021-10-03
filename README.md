@@ -14,6 +14,7 @@ I was blown away by streamlit's design and simplicity (and [valuation](https://b
 * `dolo.plot(...)` plots a matplotlib figure
 ![filter demo](etc/figures-1-optimized.gif)
 * You can cache the outputs of expensive functions using the `dolo.cache` decorator
+* Put the code in `lit.py` and use `flask run` to run the app
 
 ## How it works
 * The output of the script is used to generate the markup
